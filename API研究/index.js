@@ -30,6 +30,6 @@ console.log(config.default.sqlRequire)
 //## sql 语句 
 let sql = 'select st_asgeojson(sr_trained_4326.geog) as geojson from sr_trained_4326 where gid=1';
 //##请求数据库
-let database = 69;//代表数据库的id，需要打开 metabase 切换到对应的数据库，在 network 的请求参数中即可找到
+let database = 69;//代表数据库的id，需要打开 metabase 切换到对应的数据库，在 network 的请求参数中即可找到.
 
 metabasePost(database, sql)
