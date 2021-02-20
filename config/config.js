@@ -1,5 +1,8 @@
+let baseUrl = 'http://localhost:3000'
+
 let urlConfig = {
-  sqlRequire: 'http://localhost:3000/api/dataset',
-  testGet: 'http://localhost:3000/api/collection/99/items'
+  sqlRequire: baseUrl + '/api/dataset',
+  getSessionToken: baseUrl + '/api/session',
+  testGet: baseUrl + '/api/collection/99/items'
 }
 module.exports.default = urlConfig;
