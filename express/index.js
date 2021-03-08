@@ -29,11 +29,11 @@ app.get('/', (req, res) => {
 })
 //前端定义sql 查询语句，post请求
 app.post('/', function (req, res) {
-  //req.body.sql 为前端传入的 sql 语句
-  getMetabase.getResult(username, password, database, req.body.sql).then(a => {
+  console.log(req.body)
+  getMetabase.getResult(username, password, database, req.body.sql).then(a => {  //req.body.sql 为前端传入的 sql 语句
     console.log('成功')
-    // res.send(a);//关于 send 与 end 的区别我还不了解
-    res.end(a)
+    res.send(a);//关于 send 与 end 的区别我还不了解，不过有的时候用 res.send 正确，但是用 res.end就错误。可能后者支持的数据格式比较少吧。
+    // res.end(a)
   })
 })
 app.listen(port, () => {
