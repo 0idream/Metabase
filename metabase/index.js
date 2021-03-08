@@ -1,9 +1,9 @@
 var axios = require('axios')
 var config = require('../config/config.js')
-
+let metabaseConnect = {};
 /* ---------------------------------- 自定义参数 --------------------------------- */
 //API 地址
-console.log(config.default.sqlRequire)
+console.log(config.sqlRequire)
 //sql 语句 
 let sql = 'select st_asgeojson(sr_trained_4326.geog) as geojson from sr_trained_4326 where gid=1';
 //请求数据库
@@ -17,7 +17,7 @@ let password = "ass12345678"
 async function getResult(username, password, database, sql) {
   let sessionToken = await axios({
     method: 'post',
-    url: config.default.getSessionToken,//获取sessionToken
+    url: config.getSessionToken,//获取sessionToken
     data: {
       username: username,
       password: password
@@ -26,7 +26,7 @@ async function getResult(username, password, database, sql) {
 
   let result = await axios({
     method: 'post',
-    url: config.default.sqlRequire,//sql 查询
+    url: config.sqlRequire,//sql 查询
     data: {
       database: database,
       type: 'native',
@@ -43,6 +43,35 @@ async function getResult(username, password, database, sql) {
   });
   return result.data.data.rows[0][0];
 }
-getResult(username, password, database, sql).then(a => {
-  console.log(a)
-})
+
+metabaseConnect.getResult =
+  async function (username, password, database, sql) {
+    let sessionToken = await axios({
+      method: 'post',
+      url: config.getSessionToken,//获取sessionToken
+      data: {
+        username: username,
+        password: password
+      },
+    });
+
+    let result = await axios({
+      method: 'post',
+      url: config.sqlRequire,//sql 查询
+      data: {
+        database: database,
+        type: 'native',
+        parameters: [],
+        native: {
+          "query": sql,
+          "template-tags": {}
+        }
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Metabase-Session': sessionToken.data.id
+      }
+    });
+    return result.data.data.rows[0][0];
+  }
+module.exports = metabaseConnect;

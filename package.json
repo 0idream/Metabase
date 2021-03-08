@@ -1,5 +1,5 @@
 {
-  "name": "Metabase",
+  "name": "metabase",
   "version": "1.0.0",
   "description": "基于 metabase 的一系列玩法",
   "main": "index.js",
@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/0idream/Metabase#readme",
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5"
   }
 }

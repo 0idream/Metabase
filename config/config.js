@@ -5,4 +5,5 @@ let urlConfig = {
   getSessionToken: baseUrl + '/api/session',
   testGet: baseUrl + '/api/collection/99/items'
 }
-module.exports.default = urlConfig;
+
+module.exports = urlConfig;
