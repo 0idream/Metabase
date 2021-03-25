@@ -20,6 +20,8 @@
   "dependencies": {
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "gentelella": "^1.4.0",
+    "pg-promise": "^10.9.5"
   }
 }
