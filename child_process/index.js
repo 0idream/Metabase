@@ -13,7 +13,7 @@ const { exec } = require('child_process');
 
 /* ------------------------------- 执行 psql 命令 ------------------------------- */
 
-var code = 'pgsql2shp -u postgres -f "./test/my.shp" pgAdminTest public.building'// "./test/my.shp" 代表在test目录下生成文件，执行该命令之前，需要手动创建 test 目录
+var code = 'pgsql2shp -u postgres -f "./express/shp/my.shp" pgAdminTest public.building'// "../express/shp/my.shp" 代表在test目录下生成文件，执行该命令之前，需要手动创建 test 目录
 
 exec(code, (err, stdout, stderr) => {
   if (err) {

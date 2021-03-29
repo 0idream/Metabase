@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/0idream/Metabase#readme",
   "dependencies": {
+    "adm-zip": "^0.5.4",
+    "archiver": "^5.3.0",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",

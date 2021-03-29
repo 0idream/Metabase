@@ -86,6 +86,31 @@ app.post('/getImportantSpecies', function (req, res) {
     res.send(a);
   });
 })
+//export shp
+const { exec } = require('child_process');
+var adm_zip = require("adm-zip");//将目录下的文件压缩打包
+var code = 'pgsql2shp -u postgres -f "./shp/my.shp" pgAdminTest public.building'// "./express/shp/my.shp" 代表在test目录下生成文件，执行该命令之前，需要手动创建 test 目录
+
+app.get('/exportShp', function (req, res) {//首先是导出数据库的结果到本地
+  exec(code, (err, stdout, stderr) => {
+    if (err) {
+      console.log('err', err);
+      res.send(err)
+      return;
+    }
+    console.log(`stdout: ${stdout}`);
+    console.log(`stderr: ${stderr}`);
+    var zip = new adm_zip();
+    zip.addLocalFolder("./shp");
+    zip.writeZip("./export/editedHabitatMap.zip")
+    res.send(stdout)
+  })
+  //creating archives
+
+})
+app.get('/downloadEditedHabitatMap', function (req, res) {//然后再下载，不建议将结果导出与结果下载合并到一个步骤
+  res.download('export/editedHabitatMap.zip', 'editedHabitatMap.zip');
+})
 /* ----------------------------- express 后端 log ----------------------------- */
 
 app.listen(port, () => {
