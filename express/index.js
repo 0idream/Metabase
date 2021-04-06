@@ -89,10 +89,10 @@ app.post('/getImportantSpecies', function (req, res) {
 //export shp
 const { exec } = require('child_process');
 var adm_zip = require("adm-zip");//将目录下的文件压缩打包
-var code = 'pgsql2shp -u postgres -f "./shp/my.shp" pgAdminTest public.building'// "./express/shp/my.shp" 代表在test目录下生成文件，执行该命令之前，需要手动创建 test 目录
-
-app.get('/exportShp', function (req, res) {//首先是导出数据库的结果到本地
-  exec(code, (err, stdout, stderr) => {
+var generateShpCode = 'pgsql2shp -u postgres -f "./shp/habitat.shp" pgAdminTest public.building'// "./express/shp/habitat.shp" 代表在shp目录下生成文件，执行该命令之前，需要手动创建 shp 目录。这样的路径只能在node搭建的express rest服务中成功运行。直接调试node的话，就不能用这个目录，需要直接用根目录，列入如下代码：'pgsql2shp -u postgres -f "habitat.shp" pgAdminTest public.building'
+var geonerateGeojsonCode = 'ogr2ogr -f GeoJson "./geojson/habitat.json" "./shp/habitat.shp"'
+app.get('/exportResult', function (req, res) {//首先是导出数据库的结果到本地
+  exec(generateShpCode, (err, stdout, stderr) => {
     if (err) {
       console.log('err', err);
       res.send(err)
@@ -100,16 +100,29 @@ app.get('/exportShp', function (req, res) {//首先是导出数据库的结果�
     }
     console.log(`stdout: ${stdout}`);
     console.log(`stderr: ${stderr}`);
+    //将 shp 转换成 geojson
+    exec(geonerateGeojsonCode, (err, stdout, stderr) => {
+      if (err) {
+        console.log('err', err);
+        return;
+      }
+      console.log(`stdout: ${stdout}`);
+      console.log(`stderr: ${stderr}`);
+    })
     var zip = new adm_zip();
     zip.addLocalFolder("./shp");
-    zip.writeZip("./export/editedHabitatMap.zip")
+    zip.writeZip("./export/habitat.zip")
     res.send(stdout)
-  })
-  //creating archives
 
+  })
 })
-app.get('/downloadEditedHabitatMap', function (req, res) {//然后再下载，不建议将结果导出与结果下载合并到一个步骤
-  res.download('export/editedHabitatMap.zip', 'editedHabitatMap.zip');
+//## 下载 shp 文件
+app.get('/downloadhabitatShp', function (req, res) {//然后再下载，不建议将结果导出与结果下载合并到一个步骤
+  res.download('export/habitat.zip', 'habitat.zip');
+})
+//## 下载 geojson 文件
+app.get('/downloadhabitatGeojson', function (req, res) {//然后再下载，不建议将结果导出与结果下载合并到一个步骤
+  res.download('geojson/habitat.json', 'habitat.json');
 })
 /* ----------------------------- express 后端 log ----------------------------- */
 
